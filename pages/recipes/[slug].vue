@@ -182,7 +182,7 @@
 
     let maybeDisplayIngredient = (e) => {
         if(e.target.classList.contains('ingredient-popup')) {
-            console.log(e.target.dataset.name)
+            // console.log(e.target.dataset.name)
             displayIngredient(e.target.dataset.name, 5000)
         }
     }

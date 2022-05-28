@@ -22,7 +22,7 @@
         'recipes',
     ])
 
-    console.log('props', props.recipes)
+    // console.log('props', props.recipes)
 </script>
 
 <style lang="scss">

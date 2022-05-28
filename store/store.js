@@ -282,6 +282,15 @@ export function getRecipe(slug) {
         .catch(err => console.log(err))
 }
 
+export function getRecipeTags(tags) {
+    tags = tags.join(',')
+    let api_url = `https://alpha.braedenbeaulieu.ca/wp-json/wp/v2/tags?include=${tags}`
+    // console.log(api_url)
+    return fetch(api_url)
+		.then(response => response.json())
+        .catch(err => console.log(err))
+}
+
 export function getBlog(slug) {
     let found = false
     

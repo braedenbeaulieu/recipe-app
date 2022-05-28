@@ -8,7 +8,11 @@
   </div>
 </template>
 <script setup>
-  	let page_template = useRouter().currentRoute.value.name
+  	let page_template = ref(useRouter().currentRoute.value.name)
+	
+	onMounted(() => {
+		window.scrollTo(0, 0)
+	})
 </script>
 
 <style lang="scss" scoped>
@@ -22,10 +26,12 @@
 		}
 	}
 
-	.blog-slug > a {
-		display: none;
-	}
 	.blog-slug.container {
 		padding-top: 0;
+	}
+
+	.container {
+		overflow: hidden;
+		position: relative;
 	}
 </style>
