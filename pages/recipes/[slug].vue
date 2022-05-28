@@ -103,14 +103,15 @@
 
     getRecipe(route.params.slug).then(data => {
         if(data) {
-            // console.log(data[0])
+            console.log(data[0])
             recipe.title =  data[0].title.rendered
             recipe.slug =  data[0].slug
             recipe.blog_slug =  data[0].slug
             recipe.description =  data[0].content.rendered
             recipe.short =  data[0].acf.short
-            recipe.featured_image =  'https://tmbidigitalassetsazure.blob.core.windows.net/rms3-prod/attachments/37/1200x1200/Beefy-Taco-Dip_exps1917_BOS2469759B02_08_2bC_RMS.jpg'
-            recipe.featured_image_alt =  'Taco dip'
+            // recipe.featured_image = 'https://tmbidigitalassetsazure.blob.core.windows.net/rms3-prod/attachments/37/1200x1200/Beefy-Taco-Dip_exps1917_BOS2469759B02_08_2bC_RMS.jpg'
+            recipe.featured_image = data[0]._embedded['wp:featuredmedia'][0].source_url
+            recipe.featured_image_alt = 'Taco dip'
             recipe.tags =  data[0].tags.join(',')
             recipe.meta = {
                 difficulty:  data[0].acf.difficulty,
@@ -243,16 +244,12 @@
 
         if(ingredients) {
             ingredients.forEach(ingredient => {
-                // get the id and text
-                // let id = parseInt(ingredient.split(':')[0])
-
                 // get the ingredient
-                // let found_ingredient = getIngredientById(id) ?? false
                 let found_ingredient = getIngredientByName(ingredient) ?? false
 
                 // add a span around the recipe with some data attributes
                 if(found_ingredient) {
-                    direction = direction.replaceAll(ingredient, `<span class="ingredient-popup" data-name="${found_ingredient.name}">${ingredient}</span>`)
+                    direction = direction.replace(ingredient, `<span class="ingredient-popup" data-name="${found_ingredient.name}">${ingredient}</span>`)
                 }
             });
         }

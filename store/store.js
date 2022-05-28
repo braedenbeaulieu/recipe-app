@@ -293,15 +293,9 @@ export function getRecipe_old(slug) {
 }
 
 export function getRecipe(slug) {
-    return fetch(`http://alpha.braedenbeaulieu.ca/wp-json/wp/v2/recipes?name=${slug}`,{
-        headers: {
-            'Content-Type': 'application/json',
-            'Origin': 'https://alpha.braedenbeaulieu.ca',
-            'Access-Control-Request-Method': 'GET',
-            'Access-Control-Request-Headers': 'X-Custom-Header'
-        },
-    })
+    return fetch(`https://alpha.braedenbeaulieu.ca/wp-json/wp/v2/recipes?_embed&per_page=1&slug=${slug}`)
 		.then(response => response.json())
+        .catch(err => console.log(err))
 }
 
 export function getBlog(slug) {
