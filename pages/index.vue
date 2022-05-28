@@ -17,8 +17,46 @@
 <script setup>
 	import { getRecipes, getRandomRecipe } from '~/store/store.js'
 
-	let all_recipes = getRecipes()
-	let random_recipe = reactive(getRandomRecipe())
+	let all_recipes = ref([])
+	// let random_recipe = reactive(getRandomRecipe())
+	let random_recipe = reactive({
+        title: '',
+        slug: '',
+        short: '',
+        featured_image: '',
+        featured_image_alt: '',
+        has_blog: false,
+    })
+
+	getRandomRecipe().then(data => {
+        if(data) {
+            random_recipe.title =  data[0].title.rendered
+            random_recipe.slug =  data[0].slug
+            random_recipe.short =  data[0].acf.short
+            random_recipe.featured_image = data[0]._embedded['wp:featuredmedia'][0].source_url
+            random_recipe.featured_image_alt = data[0]._embedded['wp:featuredmedia'][0].alt_text
+        }
+    })
+
+	getRecipes().then(data => {
+        if(data) {
+			data.forEach(recipe => {
+				let recipe_obj = {
+					id: recipe.id,
+					title: recipe.title.rendered,
+					slug: recipe.slug,
+					featured_image: recipe._embedded['wp:featuredmedia'][0].source_url,
+					featured_image_alt: recipe._embedded['wp:featuredmedia'][0].alt_text,
+				}
+
+				if(recipe.content.rendered) {
+					recipe_obj.has_blog = true
+				}
+
+				all_recipes.value.push(recipe_obj)
+			})
+        }
+    })
 
 	let tags = [
 		{

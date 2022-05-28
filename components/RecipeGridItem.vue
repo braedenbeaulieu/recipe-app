@@ -2,31 +2,29 @@
     <transition name="fade">
         <NuxtLink :to="recipe_link" class="recipe-grid-item">
             <figure class="image-cover-container poster">
-                <img :src="props.img_src" :alt="props.img_alt">
+                <img :src="recipe.img_src" :alt="recipe.img_alt">
             </figure>
             <div class="content">
-                <p>{{ props.title }}</p>
+                <p v-html="recipe.title"></p>
             </div>
         </NuxtLink>
     </transition>
 </template>
 
 <script setup>
-    const props = defineProps([
+    const recipe = defineProps([
         'id',
         'title',
         'slug',
-        'description',
-        'poster',
         'img_src',
         'img_alt',
-        'blog_slug'
+        'has_blog'
     ])
 
-    let recipe_link = `/recipes/${props.slug}`
+    let recipe_link = `/recipes/${recipe.slug}`
 
-    if(props.blog_id !== false) {
-        recipe_link = `/blog/${props.blog_slug}`
+    if(recipe.has_blog !== false) {
+        recipe_link = `/blog/${recipe.slug}`
     }
 
     definePageMeta({

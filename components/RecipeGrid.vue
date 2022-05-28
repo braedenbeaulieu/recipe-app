@@ -7,7 +7,7 @@
 			:title="recipe.title" 
 			:slug="recipe.slug" 
 			:img_src="recipe.featured_image"
-			:blog_slug="recipe.blog_slug ?? false"
+			:has_blog="recipe.has_blog ?? false"
 		/>
 	</div>
 </template>

@@ -19,10 +19,10 @@
 </template>
 
 <script setup>
-    // TODO: Create search function in store.js
     import { getRandomRecipe } from '~/store/store.js'
 
     const emit = defineEmits(['search'])
+    const router = useRouter()
     const route = useRoute()
     let search_query = ref(route.query.s)
     let tag = ref(route.query.tag) ?? false
@@ -31,28 +31,29 @@
     if(search_query) {
         emit('search', search_query.value)
     }
-
-    const currentRoute = computed(() => {
-        return useRouter().currentRoute.value.name
-    })
-
     let search = (e) => {
         e.preventDefault()
         
-        if(currentRoute.value != 'recipes-search') {
-            window.location.href = window.location.origin + `/recipes/search/?s=${search_query.value}`;
+        if(router.currentRoute.value.name != 'recipes-search') {
+            window.location.href = window.location.origin + `/recipes/search/?s=${search_query.value}`
             return
         }
-        route.query.s = search_query.value
+        // route.query.s = search_query.value
+        // this.$router.push({ params: { s: 'next-part' } })
+        router.push({
+            path: '/recipes/search',
+            query: { s: search_query.value },
+        })
         emit('search', search_query.value)
     }
 
     let randomizer = () => {
-        let randomRecipe = getRandomRecipe()
-
-        window.location.href = `/recipes/${randomRecipe.slug}/`;
+        let randomRecipe = getRandomRecipe().then(data => {
+            data.forEach(recipe => {
+                window.location.href = `/recipes/${recipe.slug}/`
+            })
+        })
     }
-    
 </script>
 
 <style lang="scss">

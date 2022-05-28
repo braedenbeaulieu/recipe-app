@@ -250,46 +250,30 @@ let blogs = [
     }
 ]
 
-export function getRecipes(by = '', value = false) {
-    let found_recipes = []
+export function getRecipes(query_vars = {}, context = 'recipes') {
+    let api_url = `https://alpha.braedenbeaulieu.ca/wp-json/wp/v2/${context}`
 
-    switch(by) {
-        case 'search': 
-            recipes.forEach((recipe) => {
-                if(recipe.title.toLowerCase().includes(value.toLowerCase()) || 
-                    recipe.description.toLowerCase().includes(value.toLowerCase()) || 
-                    recipe.tags.includes(value.toLowerCase()) || 
-                    value.toLowerCase() == 'all') {
-                    found_recipes.push(recipe)
-                }
-            })
-            
-            break;
-        case 'tag': 
-            recipes.forEach(recipe => {
-                if(recipe.tags.includes(value)) {
-                    found_recipes.push(recipe)
-                }
-            })
-            break;
-        default:
-            found_recipes = recipes
-        
+    if(context == 'recipes') {
+        query_vars._embed = '',
+        query_vars.per_page = '10'
     }
 
-    return found_recipes.reverse()
-}
+    let first = true
 
-export function getRecipe_old(slug) {
-    let found = false
-    
-    recipes.forEach((recipe) => {
-        if(recipe.slug === slug) {
-            found = recipe
+    for(const key in query_vars) {
+        if(first) {
+            api_url += '?'
+            first = false
+        } else {
+            api_url += '&'
         }
-    })
+
+        api_url += `${key}=${query_vars[key]}`
+    }
     
-    return found
+    return fetch(api_url)
+        .then(response => response.json())
+        .catch(err => console.log(err))
 }
 
 export function getRecipe(slug) {
@@ -311,6 +295,9 @@ export function getBlog(slug) {
 }
 
 export function getRandomRecipe() {
-    let random = Math.floor((Math.random() * recipes.length) + 1)
-    return recipes[random]
+    // let random = Math.floor((Math.random() * recipes.length) + 1)
+    // return recipes[random]
+    return fetch(`https://alpha.braedenbeaulieu.ca/wp-json/wp/v2/recipes?_embed&per_page=1&orderby=rand`)
+		.then(response => response.json())
+        .catch(err => console.log(err))
 }

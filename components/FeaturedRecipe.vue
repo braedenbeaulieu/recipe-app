@@ -5,7 +5,7 @@
         </div>
         <div class="title">
             <p>{{ props.short }}</p>
-            <h2>{{ props.title }}</h2>
+            <h2 v-html="props.title"></h2>
         </div>
     </NuxtLink>
 </template>

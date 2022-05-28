@@ -9,7 +9,7 @@
         <div class="featured-image image-cover-container">
             <img :src="recipe.featured_image" :alt="recipe.featured_image_alt">
         </div>
-        <h1 class="page-title">{{ recipe.title }}</h1>
+        <h1 class="page-title" v-html="recipe.title"></h1>
         <ul class="meta">
             <li>
                 <svg width="26px" height="26px" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="fill-current mr-1"><g><path d="m50.004 10.938c-9.4766 0-17.188 7.7109-17.188 17.188s7.7109 17.188 17.188 17.188c9.4766 0 17.188-7.7148 17.188-17.188 0-9.4766-7.7109-17.188-17.188-17.188z"></path> <path d="m50.004 48.438c-18.152 0-32.816 14.668-32.816 32.816v6.25c0 0.85938 0.69922 1.5547 1.5547 1.5586h62.512c0.85938-0.003906 1.5547-0.69922 1.5586-1.5586v-6.25c0-18.148-14.652-32.816-32.809-32.816z"></path></g></svg>
@@ -81,7 +81,6 @@
     let recipe = reactive({
         title: '',
         slug: '',
-        blog_slug: '',
         description: '',
         short: '',
         featured_image: '',
@@ -103,15 +102,13 @@
 
     getRecipe(route.params.slug).then(data => {
         if(data) {
-            console.log(data[0])
             recipe.title =  data[0].title.rendered
             recipe.slug =  data[0].slug
             recipe.blog_slug =  data[0].slug
-            recipe.description =  data[0].content.rendered
+            recipe.description =  data[0].acf.description
             recipe.short =  data[0].acf.short
-            // recipe.featured_image = 'https://tmbidigitalassetsazure.blob.core.windows.net/rms3-prod/attachments/37/1200x1200/Beefy-Taco-Dip_exps1917_BOS2469759B02_08_2bC_RMS.jpg'
             recipe.featured_image = data[0]._embedded['wp:featuredmedia'][0].source_url
-            recipe.featured_image_alt = 'Taco dip'
+            recipe.featured_image_alt = data[0]._embedded['wp:featuredmedia'][0].alt_text
             recipe.tags =  data[0].tags.join(',')
             recipe.meta = {
                 difficulty:  data[0].acf.difficulty,
